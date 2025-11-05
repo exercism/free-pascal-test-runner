@@ -77,7 +77,7 @@ tap_parser() {
             fi
             if jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
                 if (( ${#extra} > 500 )); then
-                    extra='Output was truncated. Please limit to 500 chars'
+                    extra="${extra:0:451}[Output was truncated. Please limit to 500 chars]"
                 fi
                 (( i++ ))
                 json_arrays+=("$(

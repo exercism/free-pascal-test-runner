@@ -6,7 +6,7 @@
     {
       "name": "basic",
       "status": "fail",
-      "output": "Output was truncated. Please limit to 500 chars",
+      "output": "Portable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsP[Output was truncated. Please limit to 500 chars]",
       "test_code": "TapAssertTrue(\n    Self,\n    'basic',\n    'PNG',\n    UserOutput.abbreviate('Portable Network Graphics')\n  )",
       "message": "GOT:Portable Network Graphics\nEXPECTED:PNG"
     },
@@ -27,28 +27,28 @@
     {
       "name": "all caps word",
       "status": "fail",
-      "output": "Output was truncated. Please limit to 500 chars",
+      "output": "GNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramG[Output was truncated. Please limit to 500 chars]",
       "test_code": "TapAssertTrue(Self, 'all caps word', 'GIMP', UserOutput.abbreviate('GNU Image Manipulation Program'))",
       "message": "GOT:GNU Image Manipulation Program\nEXPECTED:GIMP"
     },
     {
       "name": "punctuation without whitespace",
       "status": "fail",
-      "output": "Output was truncated. Please limit to 500 chars",
+      "output": "Complementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-ox[Output was truncated. Please limit to 500 chars]",
       "test_code": "TapAssertTrue(Self, 'punctuation without whitespace', 'CMOS', UserOutput.abbreviate('Complementary metal-oxide semiconductor'))",
       "message": "GOT:Complementary metal-oxide semiconductor\nEXPECTED:CMOS"
     },
     {
       "name": "very long abbreviation",
       "status": "fail",
-      "output": "Output was truncated. Please limit to 500 chars",
+      "output": "Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling[Output was truncated. Please limit to 500 chars]",
       "test_code": "TapAssertTrue(Self, 'very long abbreviation', 'ROTFLSHTMDCOALM', UserOutput.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'))",
       "message": "GOT:Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\nEXPECTED:ROTFLSHTMDCOALM"
     },
     {
       "name": "consecutive delimiters",
       "status": "fail",
-      "output": "Output was truncated. Please limit to 500 chars",
+      "output": "Something - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin[Output was truncated. Please limit to 500 chars]",
       "test_code": "TapAssertTrue(Self, 'consecutive delimiters', 'SIMUFTA', UserOutput.abbreviate('Something - I made up from thin air'))",
       "message": "GOT:Something - I made up from thin air\nEXPECTED:SIMUFTA"
     },
