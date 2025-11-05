@@ -46,10 +46,7 @@ tap_parser() {
     local -a tap_content
     mapfile -d '' tap_content < "$tap_file"
     local -r status="$(jq -r '
-      [
-        .[] |
-        select(.[0] == "assert")
-      ] as $asserts |
+      map(select(.[0] == "assert")) as $asserts |
       if ($asserts | length) > 0 and
         ($asserts | length) ==
         ([$asserts[] | select(.[1].ok == true)] | length)
