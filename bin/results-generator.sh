@@ -19,7 +19,7 @@ extract_test_codes () {
                 state='out'
                 shopt -s nocasematch
                 if [[ "$body" =~ ${assert_re//\\n/${lf}} ]]; then
-                    test_codes["$name"]="${BASH_REMATCH[1]//${lf}/\\n}"
+                    test_codes["$name"]="${BASH_REMATCH[1]}"
                 else
                     echo 'parser error'
                     exit 1
@@ -35,13 +35,16 @@ extract_test_codes () {
 }
 
 tap_parser() {
-    local -r json_test_codes="$(
-      for key in "${!test_codes[@]}"; do
-        printf '"%s"' "$key"
-        printf '"%s"' "${test_codes[$key]//'"'/'\"'}"
-      done |
-      jq -n 'reduce inputs as $i ({}; . + { ($i): input })'
-    )"
+    local json_test_codes={}
+    for key in "${!test_codes[@]}"; do
+        json_test_codes=$(
+            jq -cn \
+               --argjson json "$json_test_codes" \
+               --arg key "$key" \
+               --arg val "${test_codes["$key"]}" \
+               '$json + {$key: $val}'
+            )
+    done
     local -a tap_content
     tap_content=$(< "$tap_file")
     local -r status="$(jq -r '
