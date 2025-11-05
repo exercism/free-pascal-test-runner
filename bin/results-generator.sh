@@ -6,7 +6,6 @@ declare -A test_codes=()
 
 extract_test_codes () {
     local -r lf=$'\n'
-    local test_name
     local state='out'
     local proc_re='^procedure[[:blank:]]+[0-9A-Za-z_]+\.([0-9A-Za-z_]+);$'
     local end_re='^end;$'
@@ -66,9 +65,9 @@ tap_parser() {
     then
         jq -r '
         {
-        "version": 3,
-        "status" : "error",
-        "message": (map(select(.[0] == "extra") | .[1]) | join("")[0:65535]),
+          "version": 3,
+          "status" : "error",
+          "message": (map(select(.[0] == "extra") | .[1]) | join("")[0:65535])
         }' <<< "${tap_content[0]}"
     else
         local -i i=0
@@ -107,30 +106,30 @@ tap_parser() {
            --arg status "$status" \
            --argjson test_codes "$json_test_codes" \
            '
-    {
-    "version": 3,
-    "status" : $status,
-    "message": null,
-    } + {
-    "tests": [
-      .[] | select(.[0] == "assert") | .[1] |
-      if .name == "Please implement your solution." then
-        { "name": .name, status: "error", test_code: "", message: .name }
-      elif .ok == true then
-        { "name": .name, status: "pass" }
-      else
         {
-          "name": .diag.message,
-          "status": .diag.severity,
-          "output": .output,
-          "test_code": $test_codes[.name],
-          "message": "GOT:"      + (.diag.data.got|tostring) + "\n" +
-                     "EXPECTED:" + (.diag.data.expect|tostring),
+          "version": 3,
+          "status" : $status,
+          "message": null
+        } + {
+        "tests": [
+            .[] | select(.[0] == "assert") | .[1] |
+            if .name == "Please implement your solution." then
+              { "name": .name, status: "error", test_code: "", message: .name }
+            elif .ok == true then
+              { "name": .name, status: "pass" }
+            else
+              {
+                "name": .diag.message,
+                "status": .diag.severity,
+                "output": .output,
+                "test_code": $test_codes[.name],
+                "message": "GOT:"      + (.diag.data.got|tostring) + "\n" +
+                           "EXPECTED:" + (.diag.data.expect|tostring),
+              }
+            end
+          ]
         }
-      end
-    ]
-  }
-  ' <<< "${tap_content[0]}"
+        ' <<< "${tap_content[0]}"
     fi
 }
 
