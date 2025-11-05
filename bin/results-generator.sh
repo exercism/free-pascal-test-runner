@@ -38,7 +38,7 @@ tap_parser() {
     local -r json_test_codes="$(
       for key in "${!test_codes[@]}"; do
         printf '"%s"' "$key"
-        printf '"%s"' "${test_codes[$key]}"
+        printf '"%s"' "${test_codes[$key]//'"'/'\"'}"
       done |
       jq -n 'reduce inputs as $i ({}; . + { ($i): input })'
     )"
