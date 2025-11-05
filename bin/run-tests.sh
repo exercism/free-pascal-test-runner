@@ -49,4 +49,4 @@ find ./tests \
     -not -name expected_results.json \
     -delete
 
-exit ${exit_code}
+exit "${exit_code}"
