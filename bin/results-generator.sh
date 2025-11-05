@@ -68,7 +68,7 @@ tap_parser() {
         {
         "version": 3,
         "status" : "error",
-        "message": ([.[] | select(.[0] == "extra") | .[1]] | join("")[0:65535]),
+        "message": (map(select(.[0] == "extra") | .[1]) | join("")[0:65535]),
         }' <<< "${tap_content[0]}"
     else
         local -i i=0
