@@ -1,0 +1,39 @@
+{
+  "version": 3,
+  "status": "fail",
+  "message": null,
+  "tests": [
+    {
+      "name": "equilateral - all sides are equal",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'equilateral - all sides are equal', true, ENotImplementedMulti.equilateral(2, 2, 2))",
+      "message": "GOT:false\nEXPECTED:true"
+    },
+    {
+      "name": "equilateral_any_side_is_unequal",
+      "status": "pass"
+    },
+    {
+      "name": "equilateral_no_sides_are_equal",
+      "status": "pass"
+    },
+    {
+      "name": "equilateral_all_zero_sides_is_not_a_triangle",
+      "status": "pass"
+    },
+    {
+      "name": "equilateral - sides may be floats",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'equilateral - sides may be floats', true, ENotImplementedMulti.equilateral(0.5, 0.5, 0.5))",
+      "message": "GOT:false\nEXPECTED:true"
+    },
+    {
+      "name": "Please implement your solution.",
+      "status": "error",
+      "test_code": "",
+      "message": "Please implement your solution."
+    }
+  ]
+}

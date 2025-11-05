@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 3,
   "status": "error",
-  "message": "TODO: replace with correct output"
+  "message": "SyntaxError.pas(13,1) Fatal: Syntax error, \";\" expected but \"END\" found\nFatal: Compilation aborted\nError: /usr/bin/ppcx64 returned an error exitcode\n"
 }

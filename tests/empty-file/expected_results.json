@@ -1,5 +1,5 @@
 {
-  "version": 1,
-  "status": "fail",
-  "message": "TODO: replace with correct output"
+  "version": 3,
+  "status": "error",
+  "message": "EmptyFile.pas(1,1) Fatal: Syntax error, \"UNIT\" expected but \"end of file\" found\nFatal: Compilation aborted\nError: /usr/bin/ppcx64 returned an error exitcode\n"
 }

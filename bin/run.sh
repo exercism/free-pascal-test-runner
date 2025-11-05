@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Synopsis:
 # Run the test runner on a solution.
@@ -21,40 +21,24 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
     exit 1
 fi
 
-slug="$1"
-solution_dir=$(realpath "${2%/}")
-output_dir=$(realpath "${3%/}")
-results_file="${output_dir}/results.json"
+declare -r bin_dir="$(dirname $(realpath "$0"))"
+declare -r slug="$1"
+declare -r solution_dir="$(realpath "${2%/}")"
+declare -r output_dir="$(realpath "${3%/}")"
+declare -r tap_file="${output_dir}/tap.json"
+declare -r results_file="${output_dir}/results.json"
+declare -r test_file="${solution_dir}/TestCases.pas"
 
 # Create the output directory if it doesn't exist
-mkdir -p "${output_dir}"
+mkdir -p "$output_dir"
 
 echo "${slug}: testing..."
 
-# Run the tests for the provided implementation file and redirect stdout and
-# stderr to capture it
-test_output=$(false)
-# TODO: substitute "false" with the actual command to run the test:
-# test_output=$(command_to_run_tests 2>&1)
-
-# Write the results.json file based on the exit code of the command that was 
-# just executed that tested the implementation file
-if [ $? -eq 0 ]; then
-    jq -n '{version: 1, status: "pass"}' > ${results_file}
-else
-    # OPTIONAL: Sanitize the output
-    # In some cases, the test output might be overly verbose, in which case stripping
-    # the unneeded information can be very helpful to the student
-    # sanitized_test_output=$(printf "${test_output}" | sed -n '/Test results:/,$p')
-
-    # OPTIONAL: Manually add colors to the output to help scanning the output for errors
-    # If the test output does not contain colors to help identify failing (or passing)
-    # tests, it can be helpful to manually add colors to the output
-    # colorized_test_output=$(echo "${test_output}" \
-    #      | GREP_COLOR='01;31' grep --color=always -E -e '^(ERROR:.*|.*failed)$|$' \
-    #      | GREP_COLOR='01;32' grep --color=always -E -e '^.*passed$|$')
-
-    jq -n --arg output "${test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
-fi
+# Run the tests and generete results
+cd "$solution_dir"
+pushd "$solution_dir" >/dev/null || exit
+make test=all 2>&1 | tap-parser -j 0 > "$tap_file"
+popd >/dev/null || exit
+"${bin_dir}/results-generator.sh" "$test_file" "$tap_file" > "$results_file"
 
 echo "${slug}: done"

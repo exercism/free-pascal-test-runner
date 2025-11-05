@@ -1,5 +1,70 @@
 {
-  "version": 1,
+  "version": 3,
   "status": "fail",
-  "message": "TODO: replace with correct output"
+  "message": null,
+  "tests": [
+    {
+      "name": "basic",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(\n    Self,\n    'basic',\n    'PNG',\n    AllFail.abbreviate('Portable Network Graphics')\n  )",
+      "message": "GOT:Portable Network Graphics\nEXPECTED:PNG"
+    },
+    {
+      "name": "lowercase words",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'lowercase words', 'ROR', AllFail.abbreviate('Ruby on Rails'))",
+      "message": "GOT:Ruby on Rails\nEXPECTED:ROR"
+    },
+    {
+      "name": "punctuation",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'punctuation', 'FIFO', AllFail.abbreviate('First In, First Out'))",
+      "message": "GOT:First In, First Out\nEXPECTED:FIFO"
+    },
+    {
+      "name": "all caps word",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'all caps word', 'GIMP', AllFail.abbreviate('GNU Image Manipulation Program'))",
+      "message": "GOT:GNU Image Manipulation Program\nEXPECTED:GIMP"
+    },
+    {
+      "name": "punctuation without whitespace",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'punctuation without whitespace', 'CMOS', AllFail.abbreviate('Complementary metal-oxide semiconductor'))",
+      "message": "GOT:Complementary metal-oxide semiconductor\nEXPECTED:CMOS"
+    },
+    {
+      "name": "very long abbreviation",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'very long abbreviation', 'ROTFLSHTMDCOALM', AllFail.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'))",
+      "message": "GOT:Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\nEXPECTED:ROTFLSHTMDCOALM"
+    },
+    {
+      "name": "consecutive delimiters",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'consecutive delimiters', 'SIMUFTA', AllFail.abbreviate('Something - I made up from thin air'))",
+      "message": "GOT:Something - I made up from thin air\nEXPECTED:SIMUFTA"
+    },
+    {
+      "name": "apostrophes",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'apostrophes', 'HC', AllFail.abbreviate('Halley''s Comet'))",
+      "message": "GOT:Halley's Comet\nEXPECTED:HC"
+    },
+    {
+      "name": "underscore emphasis",
+      "status": "fail",
+      "output": null,
+      "test_code": "TapAssertTrue(Self, 'underscore emphasis', 'TRNT', AllFail.abbreviate('The Road _Not_ Taken'))",
+      "message": "GOT:The Road _Not_ Taken\nEXPECTED:TRNT"
+    }
+  ]
 }

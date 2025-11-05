@@ -1,0 +1,141 @@
+#!/bin/bash
+
+declare -r test_file="$1"
+declare -r tap_file="$2"
+declare -A test_codes=()
+
+extract_test_codes () {
+    local -r lf=$'\n'
+    local test_name
+    local state='out'
+    local proc_re='^procedure[[:blank:]]+[0-9A-Za-z_]+\.([0-9A-Za-z_]+);$'
+    local end_re='^end;$'
+    local assert_re='^[^\n]+\nbegin\n *(TapAssert.*);\nend;$'
+    local name
+    local body
+    while IFS= read -r line; do
+        if [[ "$state" == 'in' ]]; then
+            printf -v body $'%s\n%s' "$body" "$line"
+            if [[ "$line" =~ $end_re ]]; then
+                state='out'
+                shopt -s nocasematch
+                if [[ "$body" =~ ${assert_re//\\n/${lf}} ]]; then
+                    test_codes["$name"]="${BASH_REMATCH[1]//${lf}/\\n}"
+                else
+                    echo 'parser error'
+                    exit 1
+                fi
+                shopt -u nocasematch
+            fi
+        elif [[ "$line" =~ $proc_re ]]; then
+            state='in'
+            name="${BASH_REMATCH[1]}"
+            body="$line"
+        fi
+    done < "$test_file"
+}
+
+tap_parser() {
+    local -r json_test_codes="$(
+      for key in ${!test_codes[*]}; do
+        printf '"%s"' "$key"
+        printf '"%s"' "${test_codes[$key]}"
+      done |
+      jq -n 'reduce inputs as $i ({}; . + { ($i): input })'
+    )"
+    local -a tap_content
+    mapfile -d '' tap_content < "$tap_file"
+    local -r status="$(jq -r '
+      [
+        .[] |
+        select(.[0] == "assert")
+      ] as $asserts |
+      if ($asserts | length) > 0 and
+        ($asserts | length) ==
+        ([$asserts[] | select(.[1].ok == true)] | length)
+      then
+        "pass"
+      else
+        "fail"
+      end
+    ' <<< "${tap_content[0]}"
+    )"
+
+    if [[ "$status" != "pass" ]] && \
+           jq -e \
+              '.[] |
+              select(.[0] == "plan" and .[1].comment == "no tests found") |
+              length > 0' <<< "${tap_content[0]}" &>/dev/null;
+    then
+        jq -r '
+        {
+        "version": 3,
+        "status" : "error",
+        "message": ([.[] | select(.[0] == "extra") | .[1]] | join("")[0:65535]),
+        }' <<< "${tap_content[0]}"
+    else
+        local -i i=0
+        local extra=''
+        local -a json_arrays
+        while IFS= read -r line; do
+            if jq -e '.[0] == "extra"' <<< "$line" &>/dev/null; then
+                printf -v extra '%s%s\n' "$extra" "$(jq -r '.[1]' <<< "$line")"
+                continue
+            fi
+            if jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
+                if (( ${#extra} > 500 )); then
+                    extra='Output was truncated. Please limit to 500 chars'
+                fi
+                (( i++ ))
+                json_arrays+=("$(
+                  jq -r --arg extra "$extra" \
+                    '[.[0],
+                     (.[1] +
+                     { "output":
+                       if $extra == "" then null else $extra end })]' \
+                      <<< "$line"
+                  )")
+                extra=''
+            else
+                json_arrays+=("$line")
+            fi
+        done < <(jq -r '.[] | tojson' <<< "${tap_content[0]}")
+        local json_string
+        printf -v json_string '%s,' "${json_arrays[@]}"
+        json_string="${json_string%,}"
+        printf -v json_string '[%s]' "$json_string"
+        tap_content[0]="$(jq -r . <<< "$json_string")"
+
+        jq -r \
+           --arg status "$status" \
+           --argjson test_codes "$json_test_codes" \
+           '
+    {
+    "version": 3,
+    "status" : $status,
+    "message": null,
+    } + {
+    "tests": [
+      .[] | select(.[0] == "assert") | .[1] |
+      if .name == "Please implement your solution." then
+        { "name": .name, status: "error", test_code: "", message: .name }
+      elif .ok == true then
+        { "name": .name, status: "pass" }
+      else
+        {
+          "name": .diag.message,
+          "status": .diag.severity,
+          "output": .output,
+          "test_code": $test_codes[.name],
+          "message": "GOT:"      + (.diag.data.got|tostring) + "\n" +
+                     "EXPECTED:" + (.diag.data.expect|tostring),
+        }
+      end
+    ]
+  }
+  ' <<< "${tap_content[0]}"
+    fi
+}
+
+extract_test_codes
+tap_parser

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Synopsis:
-# Test the test runner by running it against a predefined set of solutions 
+# Test the test runner by running it against a predefined set of solutions
 # with an expected output.
 
 # Output:
@@ -21,17 +21,32 @@ for test_dir in tests/*; do
     bin/run.sh "${test_dir_name}" "${test_dir_path}" "${test_dir_path}"
 
     # OPTIONAL: Normalize the results file
-    # If the results.json file contains information that changes between 
-    # different test runs (e.g. timing information or paths), you should normalize
-    # the results file to allow the diff comparison below to work as expected
+    # If the results.json file contains information that changes between
+    # different test runs (e.g. timing information or paths), you should
+    # normalize the results file to allow the diff comparison below to work
+    # as expected
 
     file="results.json"
     expected_file="expected_${file}"
+    sed -E -i \
+        -e "s~${test_dir_path}~/solution~g" \
+        -e "s~${test_dir}~/solution~g" \
+        -e 's~/[[:alnum:][:punct:]]+/bin/ppcx64~/usr/bin/ppcx64~' \
+        "${test_dir_path}/${file}"
     echo "${test_dir_name}: comparing ${file} to ${expected_file}"
 
-    if ! diff "${test_dir_path}/${file}" "${test_dir_path}/${expected_file}"; then
+    actual_file="${test_dir_path}/${file}"
+    expected_file="${test_dir_path}/${expected_file}"
+    if ! diff  "$actual_file" "$expected_file"; then
         exit_code=1
     fi
 done
+
+find ./tests \
+    -maxdepth 2 \
+    -type f \
+    -name '*.json' \
+    -not -name expected_results.json \
+    -exec rm {} +
 
 exit ${exit_code}

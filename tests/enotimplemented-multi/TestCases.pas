@@ -1,0 +1,168 @@
+unit TestCases;
+
+{$mode ObjFPC}{$H+}
+
+interface
+
+uses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;
+
+type
+  ENotImplementedMultiTest = class(TTestCase)
+  published
+    procedure equilateral_all_sides_are_equal;
+    procedure equilateral_any_side_is_unequal;
+    procedure equilateral_no_sides_are_equal;
+    procedure equilateral_all_zero_sides_is_not_a_triangle;
+    procedure equilateral_sides_may_be_floats;
+    procedure isosceles_last_two_sides_are_equal;
+    procedure isosceles_first_two_sides_are_equal;
+    procedure isosceles_first_and_last_sides_are_equal;
+    procedure isosceles_equilateral_triangles_are_also_isosceles;
+    procedure isosceles_no_sides_are_equal;
+    procedure isosceles_first_triangle_inequality_violation;
+    procedure isosceles_second_triangle_inequality_violation;
+    procedure isosceles_third_triangle_inequality_violation;
+    procedure isosceles_sides_may_be_floats;
+    procedure scalene_no_sides_are_equal;
+    procedure scalene_all_sides_are_equal;
+    procedure scalene_first_and_second_sides_are_equal;
+    procedure scalene_first_and_third_sides_are_equal;
+    procedure scalene_second_and_third_sides_are_equal;
+    procedure scalene_may_not_violate_triangle_inequality;
+    procedure scalene_sides_may_be_floats;
+  end;
+
+implementation
+
+uses ENotImplementedMulti;
+
+// 8b2c43ac-7257-43f9-b552-7631a91988af
+procedure ENotImplementedMultiTest.equilateral_all_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'equilateral - all sides are equal', true, ENotImplementedMulti.equilateral(2, 2, 2));
+end;
+
+// 33eb6f87-0498-4ccf-9573-7f8c3ce92b7b
+procedure ENotImplementedMultiTest.equilateral_any_side_is_unequal;
+begin
+  TapAssertTrue(Self, 'equilateral - any side is unequal', false, ENotImplementedMulti.equilateral(2, 3, 2));
+end;
+
+// c6585b7d-a8c0-4ad8-8a34-e21d36f7ad87
+procedure ENotImplementedMultiTest.equilateral_no_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'equilateral - no sides are equal', false, ENotImplementedMulti.equilateral(5, 4, 6));
+end;
+
+// 16e8ceb0-eadb-46d1-b892-c50327479251
+procedure ENotImplementedMultiTest.equilateral_all_zero_sides_is_not_a_triangle;
+begin
+  TapAssertTrue(Self, 'equilateral - all zero sides is not a triangle', false, ENotImplementedMulti.equilateral(0, 0, 0));
+end;
+
+// 3022f537-b8e5-4cc1-8f12-fd775827a00c
+procedure ENotImplementedMultiTest.equilateral_sides_may_be_floats;
+begin
+  TapAssertTrue(Self, 'equilateral - sides may be floats', true, ENotImplementedMulti.equilateral(0.5, 0.5, 0.5));
+end;
+
+// cbc612dc-d75a-4c1c-87fc-e2d5edd70b71
+procedure ENotImplementedMultiTest.isosceles_last_two_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'isosceles - last two sides are equal', true, ENotImplementedMulti.isosceles(3, 4, 4));
+end;
+
+// e388ce93-f25e-4daf-b977-4b7ede992217
+procedure ENotImplementedMultiTest.isosceles_first_two_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'isosceles - first two sides are equal', true, ENotImplementedMulti.isosceles(4, 4, 3));
+end;
+
+// d2080b79-4523-4c3f-9d42-2da6e81ab30f
+procedure ENotImplementedMultiTest.isosceles_first_and_last_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'isosceles - first and last sides are equal', true, ENotImplementedMulti.isosceles(4, 3, 4));
+end;
+
+// 8d71e185-2bd7-4841-b7e1-71689a5491d8
+procedure ENotImplementedMultiTest.isosceles_equilateral_triangles_are_also_isosceles;
+begin
+  TapAssertTrue(Self, 'isosceles - equilateral triangles are also isosceles', true, ENotImplementedMulti.isosceles(4, 4, 4));
+end;
+
+// 840ed5f8-366f-43c5-ac69-8f05e6f10bbb
+procedure ENotImplementedMultiTest.isosceles_no_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'isosceles - no sides are equal', false, ENotImplementedMulti.isosceles(2, 3, 4));
+end;
+
+// 2eba0cfb-6c65-4c40-8146-30b608905eae
+procedure ENotImplementedMultiTest.isosceles_first_triangle_inequality_violation;
+begin
+  TapAssertTrue(Self, 'isosceles - first triangle inequality violation', false, ENotImplementedMulti.isosceles(1, 1, 3));
+end;
+
+// 278469cb-ac6b-41f0-81d4-66d9b828f8ac
+procedure ENotImplementedMultiTest.isosceles_second_triangle_inequality_violation;
+begin
+  TapAssertTrue(Self, 'isosceles - second triangle inequality violation', false, ENotImplementedMulti.isosceles(1, 3, 1));
+end;
+
+// 90efb0c7-72bb-4514-b320-3a3892e278ff
+procedure ENotImplementedMultiTest.isosceles_third_triangle_inequality_violation;
+begin
+  TapAssertTrue(Self, 'isosceles - third triangle inequality violation', false, ENotImplementedMulti.isosceles(3, 1, 1));
+end;
+
+// adb4ee20-532f-43dc-8d31-e9271b7ef2bc
+procedure ENotImplementedMultiTest.isosceles_sides_may_be_floats;
+begin
+  TapAssertTrue(Self, 'isosceles - sides may be floats', true, ENotImplementedMulti.isosceles(0.5, 0.4, 0.5));
+end;
+
+// e8b5f09c-ec2e-47c1-abec-f35095733afb
+procedure ENotImplementedMultiTest.scalene_no_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'scalene - no sides are equal', true, ENotImplementedMulti.scalene(5, 4, 6));
+end;
+
+// 2510001f-b44d-4d18-9872-2303e7977dc1
+procedure ENotImplementedMultiTest.scalene_all_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'scalene - all sides are equal', false, ENotImplementedMulti.scalene(4, 4, 4));
+end;
+
+// c6e15a92-90d9-4fb3-90a2-eef64f8d3e1e
+procedure ENotImplementedMultiTest.scalene_first_and_second_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'scalene - first and second sides are equal', false, ENotImplementedMulti.scalene(4, 4, 3));
+end;
+
+// 3da23a91-a166-419a-9abf-baf4868fd985
+procedure ENotImplementedMultiTest.scalene_first_and_third_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'scalene - first and third sides are equal', false, ENotImplementedMulti.scalene(3, 4, 3));
+end;
+
+// b6a75d98-1fef-4c42-8e9a-9db854ba0a4d
+procedure ENotImplementedMultiTest.scalene_second_and_third_sides_are_equal;
+begin
+  TapAssertTrue(Self, 'scalene - second and third sides are equal', false, ENotImplementedMulti.scalene(4, 3, 3));
+end;
+
+// 70ad5154-0033-48b7-af2c-b8d739cd9fdc
+procedure ENotImplementedMultiTest.scalene_may_not_violate_triangle_inequality;
+begin
+  TapAssertTrue(Self, 'scalene - may not violate triangle inequality', false, ENotImplementedMulti.scalene(7, 3, 2));
+end;
+
+// 26d9d59d-f8f1-40d3-ad58-ae4d54123d7d
+procedure ENotImplementedMultiTest.scalene_sides_may_be_floats;
+begin
+  TapAssertTrue(Self, 'scalene - sides may be floats', true, ENotImplementedMulti.scalene(0.5, 0.4, 0.6));
+end;
+
+initialization
+RegisterTest(ENotImplementedMultiTest);
+
+end.
