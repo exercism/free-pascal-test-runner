@@ -43,7 +43,7 @@ tap_parser() {
       jq -n 'reduce inputs as $i ({}; . + { ($i): input })'
     )"
     local -a tap_content
-    mapfile -d '' tap_content < "$tap_file"
+    tap_content=$(< "$tap_file")
     local -r status="$(jq -r '
       map(select(.[0] == "assert")) as $asserts |
       if ($asserts | length) > 0 and all($asserts[] | .[1].ok) then
