@@ -35,10 +35,11 @@ mkdir -p "$output_dir"
 echo "${slug}: testing..."
 
 # Run the tests and generete results
-cd "$solution_dir"
-pushd "$solution_dir" >/dev/null || exit
-make test=all 2>&1 | tap-parser -j 0 > "$tap_file"
-popd >/dev/null || exit
+(
+    cd "$solution_dir" || exit 1
+    make test=all 2>&1 | tap-parser -j 0 > "$tap_file"
+)
+
 "${bin_dir}/results-generator.sh" "$test_file" "$tap_file" > "$results_file"
 
 echo "${slug}: done"
