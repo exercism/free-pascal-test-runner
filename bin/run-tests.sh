@@ -47,6 +47,6 @@ find ./tests \
     -type f \
     -name '*.json' \
     -not -name expected_results.json \
-    -exec rm {} +
+    -delete
 
 exit ${exit_code}
