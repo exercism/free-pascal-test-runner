@@ -42,11 +42,4 @@ for test_dir in tests/*; do
     fi
 done
 
-find ./tests \
-    -maxdepth 2 \
-    -type f \
-    -name '*.json' \
-    -not -name expected_results.json \
-    -delete
-
 exit "${exit_code}"
