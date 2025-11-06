@@ -76,9 +76,7 @@ tap_parser() {
             if jq -e '.[0] == "extra"' <<< "$line" &>/dev/null; then
                 extra+=$(jq -r '.[1]' <<< "$line")
                 extra+=$'\n'
-                continue
-            fi
-            if jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
+            elif jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
                 if (( ${#extra} > 500 )); then
                     extra="${extra:0:451}[Output was truncated. Please limit to 500 chars]"
                 fi
