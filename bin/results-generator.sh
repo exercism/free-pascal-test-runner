@@ -5,12 +5,10 @@ declare -r tap_file="$2"
 declare -A test_codes=()
 
 extract_test_codes () {
-    local -r lf=$'\n'
     local state='out'
     local proc_re='^procedure[[:blank:]]+[0-9A-Za-z_]+\.([0-9A-Za-z_]+);$'
     local end_re='^end;$'
-    local assert_re='^[^\n]+\nbegin\n *(TapAssert.*);\nend;$'
-    assert_re="${assert_re//\\n/${lf}}"
+    local assert_re=$'^[^\n]+\nbegin\n *(TapAssert.*);\nend;$'
     local name
     local body
     while IFS= read -r line; do
