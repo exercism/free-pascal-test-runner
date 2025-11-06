@@ -1,5 +1,5 @@
 {
   "version": 3,
   "status": "error",
-  "message": "EmptyFile.pas(1,1) Fatal: Syntax error, \"UNIT\" expected but \"end of file\" found\nFatal: Compilation aborted\nError: /usr/bin/ppcx64 returned an error exitcode\n"
+  "message": "EmptyFile.pas(1,1) Fatal: Syntax error, \"UNIT\" expected but \"end of file\" found\nFatal: Compilation aborted\nError: /usr/bin/ppcx64 returned an error exitcode\nmake: *** [Makefile:10: test] Error 1\n"
 }
