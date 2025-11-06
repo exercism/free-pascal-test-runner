@@ -42,6 +42,7 @@ for test_dir in tests/*; do
     fi
 done
 
+find ./tests -type d -name build -exec rm -fr {} +
 find ./tests \
     -maxdepth 2 \
     -type f \

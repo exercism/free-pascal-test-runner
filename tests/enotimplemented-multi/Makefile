@@ -10,3 +10,6 @@ test:
 	@mkdir -p "./$(DESTDIR)"
 	@cp -r ./lib "./$(DESTDIR)"
 	@$(COMMAND) && ./$(EXECUTABLE) $(test)
+
+clean:
+	@rm -fr "./$(DESTDIR)"
