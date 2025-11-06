@@ -94,13 +94,8 @@ tap_parser() {
                 json_arrays+=("$line")
             fi
         done < <(jq -c '.[]' <<< "${tap_content[0]}")
-        local json_string
-        printf -v json_string '%s,' "${json_arrays[@]}"
-        json_string="${json_string%,}"
-        printf -v json_string '[%s]' "$json_string"
-        tap_content[0]="$(jq -r . <<< "$json_string")"
-
-        jq -r \
+        printf '%s\n' "${json_arrays[@]}" |
+        jq --slurp \
            --arg status "$status" \
            --argjson test_codes "$json_test_codes" \
            '
