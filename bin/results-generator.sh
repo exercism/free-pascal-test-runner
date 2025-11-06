@@ -10,6 +10,7 @@ extract_test_codes () {
     local proc_re='^procedure[[:blank:]]+[0-9A-Za-z_]+\.([0-9A-Za-z_]+);$'
     local end_re='^end;$'
     local assert_re='^[^\n]+\nbegin\n *(TapAssert.*);\nend;$'
+    assert_re="${assert_re//\\n/${lf}}"
     local name
     local body
     while IFS= read -r line; do
@@ -18,7 +19,7 @@ extract_test_codes () {
             if [[ "$line" =~ $end_re ]]; then
                 state='out'
                 shopt -s nocasematch
-                if [[ "$body" =~ ${assert_re//\\n/${lf}} ]]; then
+                if [[ "$body" =~ $assert_re ]]; then
                     test_codes["$name"]="${BASH_REMATCH[1]}"
                 else
                     echo 'parser error'
