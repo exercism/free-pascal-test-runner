@@ -95,7 +95,7 @@ tap_parser() {
             else
                 json_arrays+=("$line")
             fi
-        done < <(jq -r '.[] | tojson' <<< "${tap_content[0]}")
+        done < <(jq -c '.[]' <<< "${tap_content[0]}")
         local json_string
         printf -v json_string '%s,' "${json_arrays[@]}"
         json_string="${json_string%,}"
