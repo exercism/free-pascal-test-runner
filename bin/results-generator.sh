@@ -122,7 +122,7 @@ tap_parser() {
             end
           ]
         }
-        ' <<< "${tap_content[0]}"
+        '
     fi
 }
 
