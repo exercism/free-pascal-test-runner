@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 declare -r test_file="$1"
 declare -r tap_file="$2"
