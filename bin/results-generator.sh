@@ -77,6 +77,7 @@ tap_parser() {
         while IFS= read -r line; do
             if jq -e '.[0] == "extra"' <<< "$line" &>/dev/null; then
                 extra+=$(jq -r '.[1]' <<< "$line")
+                extra+=$'\n'
                 continue
             fi
             if jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
