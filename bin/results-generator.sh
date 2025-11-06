@@ -76,7 +76,7 @@ tap_parser() {
         local -a json_arrays
         while IFS= read -r line; do
             if jq -e '.[0] == "extra"' <<< "$line" &>/dev/null; then
-                printf -v extra '%s%s\n' "$extra" "$(jq -r '.[1]' <<< "$line")"
+                extra+=$(jq -r '.[1]' <<< "$line")
                 continue
             fi
             if jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
