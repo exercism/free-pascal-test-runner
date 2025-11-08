@@ -110,7 +110,7 @@ tap_parser() {
               { "name": .name, status: "error", test_code: "", message: .name }
             elif .ok == true then
               { "name": .name, status: "pass" }
-            else
+            elif .diag.severity == "fail" then
               {
                 "name": .diag.message,
                 "status": .diag.severity,
@@ -118,6 +118,14 @@ tap_parser() {
                 "test_code": $test_codes[.name],
                 "message": "GOT:"      + (.diag.data.got|tostring) + "\n" +
                            "EXPECTED:" + (.diag.data.expect|tostring),
+              }
+            else
+              {
+                "name": .name,
+                "status": .diag.severity,
+                "output": .output,
+                "message": .diag.message,
+                "test_code": $test_codes[.name]
               }
             end
           ]
