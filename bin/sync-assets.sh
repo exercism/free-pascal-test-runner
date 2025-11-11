@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 declare bindir
 bindir="$(realpath "$(dirname "$0")")"
