@@ -4,8 +4,8 @@ declare bindir
 bindir="$(realpath "$(dirname "$0")")"
 cd "$bindir" || exit 1
 
-while read -r dest; do
-    echo "Syncing $dest..."
+for dest in ../tests/*/; do
+    echo "Syncing ${dest%/}..."
     rsync \
         --recursive \
         --links \
@@ -14,4 +14,4 @@ while read -r dest; do
         --checksum \
         --out-format='%i %n' \
         ../assets/ "$dest"
-done < <(find ../ -maxdepth 3 -type d -path '../tests/*')
+done
