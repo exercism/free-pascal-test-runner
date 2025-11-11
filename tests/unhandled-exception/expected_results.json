@@ -6,7 +6,7 @@
     {
       "name": "SayHi",
       "status": "error",
-      "output": "  $00000000004C5161  SAYHI,  line 15 of UnhandledException.pas\n  $0000000000431149  SAYHI,  line 22 of TestCases.pas\n  $000000000042D000\n",
+      "output": "  $FFFFFFFFFFFFFFFF  SAYHI,  line 15 of UnhandledException.pas\n  $FFFFFFFFFFFFFFFF  SAYHI,  line 22 of TestCases.pas\n  $FFFFFFFFFFFFFFFF\n",
       "message": "An unhandled exception occurred:\nEDivByZero: Division by zero\n",
       "test_code": "TapAssertTrue(Self, 'Say Hi!', 'Hello, World!', UnhandledException.SayHi())"
     }
