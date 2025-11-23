@@ -7,64 +7,64 @@
       "name": "basic",
       "status": "fail",
       "output": "Portable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsPortable Network GraphicsP[Output was truncated. Please limit to 500 chars]",
-      "test_code": "TapAssertTrue(\n    Self,\n    'basic',\n    'PNG',\n    UserOutput.abbreviate('Portable Network Graphics')\n  )",
-      "message": "GOT:Portable Network Graphics\nEXPECTED:PNG"
+      "test_code": "begin\n  TapAssertTrue(\n    Self,\n    'basic',\n    'PNG',\n    UserOutput.abbreviate('Portable Network Graphics')\n  );",
+      "message": "GOT:Portable Network Graphics\nEXPECT:PNG"
     },
     {
       "name": "lowercase words",
       "status": "fail",
       "output": "Ruby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on RailsRuby on Rails\n",
-      "test_code": "TapAssertTrue(Self, 'lowercase words', 'ROR', UserOutput.abbreviate('Ruby on Rails'))",
-      "message": "GOT:Ruby on Rails\nEXPECTED:ROR"
+      "test_code": "begin\n  TapAssertTrue(Self, 'lowercase words', 'ROR', UserOutput.abbreviate('Ruby on Rails'));",
+      "message": "GOT:Ruby on Rails\nEXPECT:ROR"
     },
     {
       "name": "punctuation",
       "status": "fail",
       "output": "First In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First OutFirst In, First Out\n",
-      "test_code": "TapAssertTrue(Self, 'punctuation', 'FIFO', UserOutput.abbreviate('First In, First Out'))",
-      "message": "GOT:First In, First Out\nEXPECTED:FIFO"
+      "test_code": "begin\n  TapAssertTrue(Self, 'punctuation', 'FIFO', UserOutput.abbreviate('First In, First Out'));",
+      "message": "GOT:First In, First Out\nEXPECT:FIFO"
     },
     {
       "name": "all caps word",
       "status": "fail",
       "output": "GNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramGNU Image Manipulation ProgramG[Output was truncated. Please limit to 500 chars]",
-      "test_code": "TapAssertTrue(Self, 'all caps word', 'GIMP', UserOutput.abbreviate('GNU Image Manipulation Program'))",
-      "message": "GOT:GNU Image Manipulation Program\nEXPECTED:GIMP"
+      "test_code": "begin\n  TapAssertTrue(Self, 'all caps word', 'GIMP', UserOutput.abbreviate('GNU Image Manipulation Program'));",
+      "message": "GOT:GNU Image Manipulation Program\nEXPECT:GIMP"
     },
     {
       "name": "punctuation without whitespace",
       "status": "fail",
       "output": "Complementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-oxide semiconductorComplementary metal-ox[Output was truncated. Please limit to 500 chars]",
-      "test_code": "TapAssertTrue(Self, 'punctuation without whitespace', 'CMOS', UserOutput.abbreviate('Complementary metal-oxide semiconductor'))",
-      "message": "GOT:Complementary metal-oxide semiconductor\nEXPECTED:CMOS"
+      "test_code": "begin\n  TapAssertTrue(Self, 'punctuation without whitespace', 'CMOS', UserOutput.abbreviate('Complementary metal-oxide semiconductor'));",
+      "message": "GOT:Complementary metal-oxide semiconductor\nEXPECT:CMOS"
     },
     {
       "name": "very long abbreviation",
       "status": "fail",
       "output": "Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling On The Floor Laughing So Hard That My Dogs Came Over And Licked MeRolling[Output was truncated. Please limit to 500 chars]",
-      "test_code": "TapAssertTrue(Self, 'very long abbreviation', 'ROTFLSHTMDCOALM', UserOutput.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'))",
-      "message": "GOT:Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\nEXPECTED:ROTFLSHTMDCOALM"
+      "test_code": "begin\n  TapAssertTrue(Self, 'very long abbreviation', 'ROTFLSHTMDCOALM', UserOutput.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'));",
+      "message": "GOT:Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\nEXPECT:ROTFLSHTMDCOALM"
     },
     {
       "name": "consecutive delimiters",
       "status": "fail",
       "output": "Something - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin airSomething - I made up from thin[Output was truncated. Please limit to 500 chars]",
-      "test_code": "TapAssertTrue(Self, 'consecutive delimiters', 'SIMUFTA', UserOutput.abbreviate('Something - I made up from thin air'))",
-      "message": "GOT:Something - I made up from thin air\nEXPECTED:SIMUFTA"
+      "test_code": "begin\n  TapAssertTrue(Self, 'consecutive delimiters', 'SIMUFTA', UserOutput.abbreviate('Something - I made up from thin air'));",
+      "message": "GOT:Something - I made up from thin air\nEXPECT:SIMUFTA"
     },
     {
       "name": "apostrophes",
       "status": "fail",
       "output": "Halley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's CometHalley's Comet\n",
-      "test_code": "TapAssertTrue(Self, 'apostrophes', 'HC', UserOutput.abbreviate('Halley''s Comet'))",
-      "message": "GOT:Halley's Comet\nEXPECTED:HC"
+      "test_code": "begin\n  TapAssertTrue(Self, 'apostrophes', 'HC', UserOutput.abbreviate('Halley''s Comet'));",
+      "message": "GOT:Halley's Comet\nEXPECT:HC"
     },
     {
       "name": "underscore emphasis",
       "status": "fail",
       "output": "The Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ TakenThe Road _Not_ Taken\n",
-      "test_code": "TapAssertTrue(Self, 'underscore emphasis', 'TRNT', UserOutput.abbreviate('The Road _Not_ Taken'))",
-      "message": "GOT:The Road _Not_ Taken\nEXPECTED:TRNT"
+      "test_code": "begin\n  TapAssertTrue(Self, 'underscore emphasis', 'TRNT', UserOutput.abbreviate('The Road _Not_ Taken'));",
+      "message": "GOT:The Road _Not_ Taken\nEXPECT:TRNT"
     }
   ]
 }

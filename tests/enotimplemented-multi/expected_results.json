@@ -7,8 +7,8 @@
       "name": "equilateral - all sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'equilateral - all sides are equal', true, ENotImplementedMulti.equilateral(2, 2, 2))",
-      "message": "GOT:false\nEXPECTED:true"
+      "test_code": "begin\n  TapAssertTrue(Self, 'equilateral - all sides are equal', true, ENotImplementedMulti.equilateral(2, 2, 2));",
+      "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "equilateral_any_side_is_unequal",
@@ -26,8 +26,8 @@
       "name": "equilateral - sides may be floats",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'equilateral - sides may be floats', true, ENotImplementedMulti.equilateral(0.5, 0.5, 0.5))",
-      "message": "GOT:false\nEXPECTED:true"
+      "test_code": "begin\n  TapAssertTrue(Self, 'equilateral - sides may be floats', true, ENotImplementedMulti.equilateral(0.5, 0.5, 0.5));",
+      "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "Please implement your solution.",

@@ -8,7 +8,7 @@
       "status": "error",
       "output": "  $FFFFFFFFFFFFFFFF  SAYHI,  line 15 of UnhandledException.pas\n  $FFFFFFFFFFFFFFFF  SAYHI,  line 22 of TestCases.pas\n  $FFFFFFFFFFFFFFFF\n",
       "message": "An unhandled exception occurred:\nEDivByZero: Division by zero\n",
-      "test_code": "TapAssertTrue(Self, 'Say Hi!', 'Hello, World!', UnhandledException.SayHi())"
+      "test_code": "begin\n  TapAssertTrue(Self, 'Say Hi!', 'Hello, World!', UnhandledException.SayHi());"
     }
   ]
 }

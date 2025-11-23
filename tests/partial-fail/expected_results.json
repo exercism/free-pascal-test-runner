@@ -7,7 +7,7 @@
       "name": "equilateral - all sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'equilateral - all sides are equal', true, PartialFail.equilateral(2, 2, 2));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'equilateral - all sides are equal', true, PartialFail.equilateral(2, 2, 2));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
@@ -26,35 +26,35 @@
       "name": "equilateral - sides may be floats",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'equilateral - sides may be floats', true, PartialFail.equilateral(0.5, 0.5, 0.5));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'equilateral - sides may be floats', true, PartialFail.equilateral(0.5, 0.5, 0.5));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "isosceles - last two sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'isosceles - last two sides are equal', true, PartialFail.isosceles(3, 4, 4));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'isosceles - last two sides are equal', true, PartialFail.isosceles(3, 4, 4));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "isosceles - first two sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'isosceles - first two sides are equal', true, PartialFail.isosceles(4, 4, 3));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'isosceles - first two sides are equal', true, PartialFail.isosceles(4, 4, 3));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "isosceles - first and last sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'isosceles - first and last sides are equal', true, PartialFail.isosceles(4, 3, 4));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'isosceles - first and last sides are equal', true, PartialFail.isosceles(4, 3, 4));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "isosceles - equilateral triangles are also isosceles",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'isosceles - equilateral triangles are also isosceles', true, PartialFail.isosceles(4, 4, 4));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'isosceles - equilateral triangles are also isosceles', true, PartialFail.isosceles(4, 4, 4));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
@@ -77,14 +77,14 @@
       "name": "isosceles - sides may be floats",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'isosceles - sides may be floats', true, PartialFail.isosceles(0.5, 0.4, 0.5));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'isosceles - sides may be floats', true, PartialFail.isosceles(0.5, 0.4, 0.5));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
       "name": "scalene - no sides are equal",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'scalene - no sides are equal', true, PartialFail.scalene(5, 4, 6));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'scalene - no sides are equal', true, PartialFail.scalene(5, 4, 6));",
       "message": "GOT:false\nEXPECT:true"
     },
     {
@@ -111,7 +111,7 @@
       "name": "scalene - sides may be floats",
       "status": "fail",
       "output": null,
-      "test_code": "TapAssertTrue(Self, 'scalene - sides may be floats', true, PartialFail.scalene(0.5, 0.4, 0.6));",
+      "test_code": "begin\n  TapAssertTrue(Self, 'scalene - sides may be floats', true, PartialFail.scalene(0.5, 0.4, 0.6));",
       "message": "GOT:false\nEXPECT:true"
     }
   ]

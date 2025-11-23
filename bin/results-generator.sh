@@ -8,7 +8,6 @@ extract_test_codes () {
     local state='out'
     local proc_re='^procedure[[:blank:]]+[0-9A-Za-z_]+\.([0-9A-Za-z_]+);$'
     local end_re='^end;$'
-    local assert_re=$'^[^\n]+\nbegin\n *(TapAssert.*);\nend;$'
     local name
     local body
     while IFS= read -r line; do
@@ -16,14 +15,11 @@ extract_test_codes () {
             printf -v body $'%s\n%s' "$body" "$line"
             if [[ "$line" =~ $end_re ]]; then
                 state='out'
-                shopt -s nocasematch
-                if [[ "$body" =~ $assert_re ]]; then
-                    test_codes["$name"]="${BASH_REMATCH[1]}"
-                else
-                    echo 'parser error'
-                    exit 1
-                fi
-                shopt -u nocasematch
+                body="${body#*;$'\n'}"
+                body="${body%end;}"
+                body="${body#$'\n'}"
+                body="${body%$'\n'}"
+                test_codes["$name"]="$body"
             fi
         elif [[ "$line" =~ $proc_re ]]; then
             state='in'
@@ -116,8 +112,8 @@ tap_parser() {
                 "status": .diag.severity,
                 "output": .output,
                 "test_code": $test_codes[.name],
-                "message": "GOT:"      + (.diag.data.got|tostring) + "\n" +
-                           "EXPECTED:" + (.diag.data.expect|tostring),
+                "message": "GOT:"    + (.diag.data.got|tostring) + "\n" +
+                           "EXPECT:" + (.diag.data.expect|tostring),
               }
             else
               {

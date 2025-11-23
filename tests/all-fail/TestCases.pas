@@ -37,8 +37,16 @@ end;
 
 // 79ae3889-a5c0-4b01-baf0-232d31180c08
 procedure AllFailTest.lowercase_words;
+const
+  message = 'lowercase words';
+  input   = 'Ruby on Rails';
+  expect  = 'ROR';
+var
+  actual : string;
 begin
-  TapAssertTrue(Self, 'lowercase words', 'ROR', AllFail.abbreviate('Ruby on Rails'));
+  actual := AllFail.abbreviate(input);
+  TapAssertTrue(Self, message, expect, actual);
+  write('');
 end;
 
 // ec7000a7-3931-4a17-890e-33ca2073a548

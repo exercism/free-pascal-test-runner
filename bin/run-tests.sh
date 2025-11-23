@@ -33,7 +33,8 @@ for test_dir in tests/*; do
         -e "s~${test_dir}~/solution~g" \
         -e 's~/[[:alnum:][:punct:]]+/bin/ppcx64~/usr/bin/ppcx64~g' \
         -e 's/\$[0-9A-F]{16}\b/$FFFFFFFFFFFFFFFF/g' \
-        "${test_dir_path}/${file}"
+        "${test_dir_path}/${file}" \
+        "${test_dir_path}/tap.json"
     echo "${test_dir_name}: comparing ${file} to ${expected_file}"
 
     actual_file="${test_dir_path}/${file}"
