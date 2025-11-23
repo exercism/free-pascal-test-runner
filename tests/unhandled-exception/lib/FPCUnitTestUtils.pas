@@ -2,40 +2,54 @@ unit FPCUnitTestUtils;
 
 {$MODE ObjFPC}{$H+}
 
+{$WARN 4046 OFF}
+{$WARN 5024 OFF}
+{$WARN 5062 OFF}
+{$WARN 5071 OFF}
+{$WARN 6058 OFF}
+
 interface
 
-uses FPCUnit;
+uses FPCUnit, Generics.Collections;
 
 type
   TIntArray   = Array Of Integer;
   TIntArray2D = Array Of Array Of Integer;
   TStrArray   = Array Of String;
+  TCharIntDict = Specialize TDictionary<Char, Integer>;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : boolean;
+  const Expect   : boolean;
   const Actual   : boolean
 );
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : string;
+  const Expect   : string;
   const Actual   : string
 );
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : integer;
+  const Expect   : integer;
   const Actual   : integer
 );
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : double;
+  const Expect   : UInt64;
+  const Actual   : UInt64
+);
+
+procedure TapAssertTrue(
+  ACase          : TTestCase;
+  const AMessage : string;
+  const Expect   : double;
   const Actual   : double;
   const epsilon  : double
 );
@@ -43,32 +57,39 @@ procedure TapAssertTrue(
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TIntArray;
+  const Expect   : TIntArray;
   const Actual   : TIntArray
 );
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TStrArray;
+  const Expect   : TStrArray;
   const Actual   : TStrArray
 );
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TIntArray2D;
+  const Expect   : TIntArray2D;
   const Actual   : TIntArray2D
 );
 
+procedure TapAssertTrue(
+  ACase          : TTestCase;
+  const AMessage : string;
+  const Expect   : TCharIntDict;
+  const Actual   : TCharIntDict
+);
 
-function EncodeJsonMessage(const AMessage : string; const Expected : boolean; const Actual : boolean) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : string;  const Actual : string ) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : integer; const Actual : integer) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : single;  const Actual : single ) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : TIntArray;   const Actual : TIntArray  ) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : TIntArray2D; const Actual : TIntArray2D) : string;
-function EncodeJsonMessage(const AMessage : string; const Expected : TStrArray;   const Actual : TStrArray  ) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : boolean) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : string ) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : integer) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : UInt64)  : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : single ) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TIntArray  ) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TIntArray2D) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TStrArray  ) : string;
 
 implementation
 
@@ -141,63 +162,98 @@ begin
   result := true;
 end;
 
-function EncodeJsonMessage(const AMessage: string; const Expected : boolean; const Actual : boolean) : string;
+function CompareTDictionaries(const DictOne, DictTwo : TCharIntDict) : boolean;
+var
+  key    : char;
+  { KvPair : TCharIntDict.TDictionaryPair; }
+begin
+  if DictOne.Count <> DictTwo.Count then
+    begin
+      result := false;
+      exit;
+    end;
+  for key in DictOne.Keys do
+    begin
+      if not(DictTwo.ContainsKey(key)) or (DictTwo[key] <> DictOne[key]) then
+        begin
+          result := false;
+          exit;
+        end;
+    end;
+  result := true;
+end;
+
+function EncodeJsonMessage(const AMessage: string; const Expect, Actual : boolean) : string;
 var
   JObject     : TJSONObject;
   JsonMessage : string;
 begin
   JObject := TJSONObject.Create;
   JObject.Add('message', AMessage);
-  JObject.Add('expected', Expected);
+  JObject.Add('expect', Expect);
   JObject.Add('actual', Actual);
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : string; const Actual : string) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : string) : string;
 var
   JObject     : TJSONObject;
   JsonMessage : string;
 begin
   JObject := TJSONObject.Create;
   JObject.Add('message', AMessage);
-  JObject.Add('expected', Expected);
+  JObject.Add('expect', Expect);
   JObject.Add('actual', Actual);
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : integer; const Actual : integer) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : integer) : string;
 var
   JObject     : TJSONObject;
   JsonMessage : string;
 begin
   JObject := TJSONObject.Create;
   JObject.Add('message', AMessage);
-  JObject.Add('expected', Expected);
+  JObject.Add('expect', Expect);
   JObject.Add('actual', Actual);
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : single; const Actual : single) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : UInt64) : string;
 var
   JObject     : TJSONObject;
   JsonMessage : string;
 begin
   JObject := TJSONObject.Create;
   JObject.Add('message', AMessage);
-  JObject.Add('expected', Expected);
+  JObject.Add('expect', Expect);
   JObject.Add('actual', Actual);
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : TIntArray; const Actual : TIntArray) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : single) : string;
+var
+  JObject     : TJSONObject;
+  JsonMessage : string;
+begin
+  JObject := TJSONObject.Create;
+  JObject.Add('message', AMessage);
+  JObject.Add('expect', Expect);
+  JObject.Add('actual', Actual);
+  JsonMessage := JObject.AsJson;
+  JObject.Free;
+  result := JsonMessage;
+end;
+
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TIntArray) : string;
 var
   JObject     : TJSONObject;
   JArray      : TJSONArray;
@@ -208,11 +264,11 @@ begin
   JObject.Add('message', AMessage);
 
   JArray := TJSONArray.Create;
-  for i := low(Expected) to high(Expected) do
+  for i := low(Expect) to high(Expect) do
     begin
-      JArray.Add(Expected[i]);
+      JArray.Add(Expect[i]);
     end;
-  JObject.Add('expected', JArray);
+  JObject.Add('expect', JArray);
 
   JArray := TJSONArray.Create;
   for i := low(Actual) to high(Actual) do
@@ -222,12 +278,12 @@ begin
   JObject.Add('actual', JArray);
 
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
 
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : TIntArray2D; const Actual : TIntArray2D) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TIntArray2D) : string;
 var
   JObject     : TJSONObject;
   JOuterArray : TJSONArray;
@@ -239,16 +295,16 @@ begin
   JObject.Add('message', AMessage);
 
   JOuterArray := TJSONArray.Create;
-  for i := low(Expected) to high(Expected) do
+  for i := low(Expect) to high(Expect) do
     begin
       JInnerArray := TJSONArray.Create;
-      for j := low(Expected[i]) to high(Expected[i]) do
+      for j := low(Expect[i]) to high(Expect[i]) do
         begin
-          JInnerArray.Add(Expected[i][j]);
+          JInnerArray.Add(Expect[i][j]);
         end;
       JOuterArray.Add(JInnerArray);
     end;
-  JObject.Add('expected', JOuterArray);
+  JObject.Add('expect', JOuterArray);
 
   JOuterArray := TJSONArray.Create;
   for i := low(Actual) to high(Actual) do
@@ -263,12 +319,12 @@ begin
   JObject.Add('actual', JOuterArray);
 
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
 
   result := JsonMessage;
 end;
 
-function EncodeJsonMessage(const AMessage : string; const Expected : TStrArray;   const Actual : TStrArray  ) : string;
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TStrArray  ) : string;
 var
   JObject     : TJSONObject;
   JArray      : TJSONArray;
@@ -279,11 +335,11 @@ begin
   JObject.Add('message', AMessage);
 
   JArray := TJSONArray.Create;
-  for i := low(Expected) to high(Expected) do
+  for i := low(Expect) to high(Expect) do
     begin
-      JArray.Add(Expected[i]);
+      JArray.Add(Expect[i]);
     end;
-  JObject.Add('expected', JArray);
+  JObject.Add('expect', JArray);
 
   JArray := TJSONArray.Create;
   for i := low(Actual) to high(Actual) do
@@ -293,94 +349,144 @@ begin
   JObject.Add('actual', JArray);
 
   JsonMessage := JObject.AsJson;
-  JOBJECT.Free;
+  JObject.Free;
 
+  result := JsonMessage;
+end;
+
+
+function EncodeJsonMessage(const AMessage : string; const Expect, Actual : TCharIntDict) : string;
+var
+  JObject     : TJSONObject;
+  JsonMessage : string;
+  JExpect     : TJSONObject;
+  JActual     : TJSONObject;
+  KvPair      : TCharIntDict.TDictionaryPair;
+begin
+  JObject := TJSONObject.Create;
+  JObject.Add('message', AMessage);
+
+  JExpect := TJSONObject.Create;
+  for KvPair in Expect do JExpect.Add(KvPair.Key, KvPair.Value);
+  JObject.Add('expect', JExpect);
+
+  JActual := TJSONObject.Create;
+  for KvPair in Actual do JActual.Add(KvPair.Key, KvPair.Value);
+  JObject.Add('actual', JActual);
+
+  JsonMessage := JObject.AsJson;
+  JObject.Free;
   result := JsonMessage;
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : boolean;
+  const Expect   : boolean;
   const Actual   : boolean
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, Expected = Actual);
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, Expect = Actual);
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : string;
+  const Expect   : string;
   const Actual   : string
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, Expected = Actual);
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, Expect = Actual);
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : integer;
+  const Expect   : integer;
   const Actual   : integer
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, Expected = Actual);
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, Expect = Actual);
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : double;
+  const Expect   : UInt64;
+  const Actual   : UInt64
+);
+var JsonMsg : string;
+begin
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, Expect = Actual);
+end;
+
+
+procedure TapAssertTrue(
+  ACase          : TTestCase;
+  const AMessage : string;
+  const Expect   : double;
   const Actual   : double;
   const epsilon  : double
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, SameValue(Expected, Actual, epsilon));
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, SameValue(Expect, Actual, epsilon));
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TIntArray;
+  const Expect   : TIntArray;
   const Actual   : TIntArray
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, CompareArrays(Expected, Actual));
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, CompareArrays(Expect, Actual));
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TStrArray;
+  const Expect   : TStrArray;
   const Actual   : TStrArray
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, CompareArrays(Expected, Actual));
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, CompareArrays(Expect, Actual));
 end;
 
 procedure TapAssertTrue(
   ACase          : TTestCase;
   const AMessage : string;
-  const Expected : TIntArray2D;
+  const Expect   : TIntArray2D;
   const Actual   : TIntArray2D
 );
 var JsonMsg : string;
 begin
-  JsonMsg := EncodeJsonMessage(AMessage, Expected, Actual);
-  ACase.AssertTrue(JsonMsg, Compare2DArrays(Expected, Actual));
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, Compare2DArrays(Expect, Actual));
+end;
+
+procedure TapAssertTrue(
+  ACase          : TTestCase;
+  const AMessage : string;
+  const Expect   : TCharIntDict;
+  const Actual   : TCharIntDict
+);
+var JsonMsg : string;
+begin
+  JsonMsg := EncodeJsonMessage(AMessage, Expect, Actual);
+  ACase.AssertTrue(JsonMsg, CompareTDictionaries(Expect, Actual));
 end;
 
 end.

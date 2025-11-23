@@ -43,8 +43,8 @@ end;
 
 procedure TCustomResultWriter.AddFailure(ATest: TTest; AFailure: TTestFailure);
 var
-  JData                     : TJSONData;
-  LMessage, LGot, LExpected : string;
+  JData                   : TJSONData;
+  LMessage, LGot, LExpect : string;
 begin
 
   FTestPassed := false;
@@ -54,16 +54,22 @@ begin
     try
       JData     := GetJSON(AFailure.ExceptionMessage);
       LMessage  := JData.FindPath('message').AsString;
-      if GetEnumName(
-           TypeInfo(TJSONtype), ord(JData.FindPath('expected').JSONType)
-         ) = 'jtArray' then
-        LExpected := JData.FindPath('expected').FormatJSON
-      else LExpected := JData.FindPath('expected').AsString;
-      if GetEnumName(
+      case
+        GetEnumName(
+          TypeInfo(TJSONtype), ord(JData.FindPath('expect').JSONType)
+        ) of
+        'jtArray', 'jtObject' :
+          LExpect := JData.FindPath('expect').FormatJSON;
+        otherwise LExpect := JData.FindPath('expect').AsString;
+      end;
+      case
+        GetEnumName(
            TypeInfo(TJSONtype), ord(JData.FindPath('actual').JSONType)
-         ) = 'jtArray' then
-        LGot := JData.FindPath('actual').FormatJSON
-      else LGot := JData.FindPath('actual').AsString;
+         ) of
+        'jtArray', 'jtObject' :
+          LGot := JData.FindPath('actual').FormatJSON
+        otherwise LGot := JData.FindPath('actual').AsString;
+      end;
     finally
       JData.Free;
     end
@@ -93,12 +99,12 @@ begin
   else
     writeln('    got: ', LGot);
 
-  if pos(#10, LExpected) > 0 then
+  if pos(#10, LExpect) > 0 then
     begin
-      writeln('    expected: |');
-      writeln('      ' + ReplaceStr(LExpected, #10, #10 + '      '));
+      writeln('    expect: |');
+      writeln('      ' + ReplaceStr(LExpect, #10, #10 + '      '));
     end
-  else writeln('    expect: ', LExpected);
+  else writeln('    expect: ', LExpect);
 
   writeln('  ...');
 end;
