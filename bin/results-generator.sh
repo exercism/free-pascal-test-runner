@@ -30,16 +30,18 @@ extract_test_codes () {
 }
 
 tap_parser() {
-    local json_test_codes={}
+    # Build the test code lookup with one jq call. Starting jq once per test
+    # took a few milliseconds each time, which added up on long test files.
+    local -a test_code_args=()
     for key in "${!test_codes[@]}"; do
-        json_test_codes=$(
-            jq -cn \
-               --argjson json "$json_test_codes" \
-               --arg key "$key" \
-               --arg val "${test_codes["$key"]}" \
-               '$json + {$key: $val}'
-            )
+        test_code_args+=("$key" "${test_codes["$key"]}")
     done
+    local json_test_codes
+    json_test_codes=$(
+        jq -cn '$ARGS.positional as $a |
+                [range(0; $a | length; 2) | {($a[.]): $a[. + 1]}] | add // {}' \
+           --args "${test_code_args[@]}"
+    )
     local -a tap_content
     tap_content=$(< "$tap_file")
     local -r status="$(jq -r '
@@ -65,36 +67,38 @@ tap_parser() {
           "message": (map(select(.[0] == "extra") | .[1]) | join("")[0:65535])
         }' <<< "${tap_content[0]}"
     else
-        local -i i=0
-        local extra=''
-        local -a json_arrays
-        while IFS= read -r line; do
-            if jq -e '.[0] == "extra"' <<< "$line" &>/dev/null; then
-                extra+=$(jq -r '.[1]' <<< "$line")
-                extra+=$'\n'
-            elif jq -e '.[0] == "assert"' <<< "$line" &>/dev/null; then
-                if (( ${#extra} > 500 )); then
-                    extra="${extra:0:451}[Output was truncated. Please limit to 500 chars]"
-                fi
-                (( i++ ))
-                json_arrays+=("$(
-                  jq -r --arg extra "$extra" \
-                    '[.[0],
-                     (.[1] +
-                     { "output":
-                       if $extra == "" then null else $extra end })]' \
-                      <<< "$line"
-                  )")
-                extra=''
-            else
-                json_arrays+=("$line")
-            fi
-        done < <(jq -c '.[]' <<< "${tap_content[0]}")
-        printf '%s\n' "${json_arrays[@]}" |
-        jq --slurp \
-           --arg status "$status" \
+        # Attach the output printed before each assert to that assert, in one
+        # jq call. This used to start several jq processes for every line of
+        # TAP, which took about 2 s for an exercise with 95 tests.
+        # Each piece of output loses its trailing newlines and gains one
+        # newline. Output over 500 bytes is cut to its first 451 bytes.
+        jq --arg status "$status" \
            --argjson test_codes "$json_test_codes" \
            '
+        def first_bytes($n):
+          reduce explode[] as $c ({s: [], n: 0, full: false};
+            if .full then . else
+              ([$c] | implode | utf8bytelength) as $b |
+              if .n + $b > $n then .full = true
+              else .s += [$c] | .n += $b end
+            end) | .s | implode;
+        reduce .[] as $entry ({extra: "", entries: []};
+          if $entry[0] == "extra" then
+            .extra += ($entry[1] | if type == "string" then . else tojson end
+                       | sub("\n+$"; "")) + "\n"
+          elif $entry[0] == "assert" then
+            (if (.extra | utf8bytelength) > 500 then
+               (.extra | first_bytes(451)) +
+                 "[Output was truncated. Please limit to 500 chars]"
+             else .extra end) as $output |
+            .entries += [[$entry[0],
+                          ($entry[1] +
+                           { "output":
+                             if $output == "" then null else $output end })]] |
+            .extra = ""
+          else
+            .entries += [$entry]
+          end) | .entries |
         {
           "version": 3,
           "status" : $status,
@@ -126,7 +130,7 @@ tap_parser() {
             end
           ]
         }
-        '
+        ' <<< "${tap_content[0]}"
     fi
 }
 
