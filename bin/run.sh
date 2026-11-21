@@ -37,6 +37,20 @@ echo "${slug}: testing..."
 # Run the tests and generete results
 cd "$solution_dir" || exit 1
 
+# Use the helper units compiled at image build when the solution's copies
+# match them exactly. The compiler reuses a compiled unit only when its
+# source file has the same modification time as the one it was compiled
+# from, so the solution's copies are given the times of the image's copies.
+# Any other version of lib/ is compiled as before.
+declare -r precompiled_dir="${bin_dir}/../precompiled"
+if cmp -s lib/FPCUnitTestUtils.pas "${precompiled_dir}/FPCUnitTestUtils.pas" &&
+   cmp -s lib/FPCUnitTAPReporter.pas "${precompiled_dir}/FPCUnitTAPReporter.pas"; then
+    touch -r "${precompiled_dir}/FPCUnitTestUtils.pas" lib/FPCUnitTestUtils.pas
+    touch -r "${precompiled_dir}/FPCUnitTAPReporter.pas" lib/FPCUnitTAPReporter.pas
+    mkdir -p build
+    cp "${precompiled_dir}"/*.ppu "${precompiled_dir}"/*.o build/
+fi
+
 make test=all 2>&1 | tap-parser -j 0 > "$tap_file"
 
 "${bin_dir}/results-generator.sh" "$test_file" "$tap_file" > "$results_file"
